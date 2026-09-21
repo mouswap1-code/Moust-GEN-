@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Moust GEN</title>
+<meta name="theme-color" content="#4CAF50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Moust GEN">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0D1B2A;
+  color: #FFFFFF;
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+.container { max-width: 700px; margin: 0 auto; }
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1B263B;
+}
+.header img {
+  width: 48px;
+  height: 48px;
+}
+h1 {
+  font-size: 20px;
+  color: #4CAF50;
+  margin: 0;
+}
+.subtitle {
+  font-size: 11px;
+  color: #B0BEC5;
+  margin-top: 2px;
+}
+h2 {
+  font-size: 13px;
+  margin: 16px 0 8px;
+  color: #90CAF9;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+label {
+  display: block;
+  font-size: 12px;
+  color: #B0BEC5;
+  margin-bottom: 4px;
+  margin-top: 12px;
+}
+input[type="text"], textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: #1B263B;
+  color: #FFFFFF;
+  border: 1px solid #37474F;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+input[type="text"]:focus, textarea:focus {
+  outline: none;
+  border-color: #1E88E5;
+}
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: monospace;
+  font-size: 12px;
+}
+.row {
+  display: flex;
+  gap: 12px;
+}
+.row > div { flex: 1; }
+.checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+}
+.checkbox-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 13px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4CAF50;
+}
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  background: #4CAF50;
+  color: #000000;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover { background: #66BB6A; }
+button:active { transform: scale(0.98); }
+button.secondary {
+  background: #1E88E5;
+  color: #FFFFFF;
+}
+button.secondary:hover { background: #42A5F5; }
+.section {
+  background: #1B263B;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.output {
+  background: #1B263B;
+  padding: 12px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 11px;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 8px;
+  color: #B0BEC5;
+}
+.status {
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  display: none;
+}
+.status.ok { background: #1B5E20; color: #A5D6A7; display: block; }
+.status.err { background: #B71C1C; color: #FFCDD2; display: block; }
+
+/* Bouton install PWA */
+.install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1B263B;
+  padding: 12px 16px;
+  border-top: 2px solid #4CAF50;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  z-index: 999;
+}
+.install-banner.show { display: flex; }
+.install-banner span {
+  flex: 1;
+  font-size: 13px;
+}
+.install-banner button {
+  margin: 0;
+  padding: 8px 16px;
+  width: auto;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <img src="icon.svg" alt="Moust GEN">
+    <div>
+      <h1>Moust ✅ GEN</h1>
+      <div class="subtitle">Générateur Config.json — SSH PAYLOAD TLS</div>
+    </div>
+  </div>
+
+  <!-- Nom du serveur -->
+  <div class="section">
+    <h2>Informations serveur</h2>
+
+    <div class="row">
+      <div>
+        <label>Nombre (nom du serveur)</label>
+        <input type="text" id="name" placeholder="VIP 2 🔥" value="VIP 2">
+      </div>
+      <div>
+        <label>Bandera (drapeau)</label>
+        <input type="text" id="flag" placeholder="us" value="us" maxlength="4">
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Server Host (IP)</label>
+        <input type="text" id="serverIp" placeholder="172.217.20.110">
+      </div>
+      <div>
+        <label>Server Info</label>
+        <input type="text" id="myServer" placeholder="VIP SERVER">
+      </div>
+    </div>
+
+    <label>SSH Puerto</label>
+    <input type="text" id="serverPort" placeholder="22" value="22">
+
+    <label>SSL Puerto</label>
+    <input type="text" id="sslPort" placeholder="443" value="443">
+
+    <div class="row">
+      <div>
+        <label>Usuario (user SSH)</label>
+        <input type="text" id="serverUser" placeholder="ben" value="ben">
+      </div>
+      <div>
+        <label>Contraseña (pass SSH)</label>
+        <input type="text" id="serverPass" placeholder="ben" value="ben">
+      </div>
+    </div>
+  </div>
+
+  <!-- SSL Payload TLS -->
+  <div class="section">
+    <h2>🔐 SSH PAYLOAD TLS</h2>
+
+    <label>SNI (Server Name Indication)</label>
+    <input type="text" id="sni" placeholder="crashlyticsreports-pa.googleapis.com" value="crashlyticsreports-pa.googleapis.com">
+
+    <label>Payload</label>
+    <textarea id="payload" placeholder="GET / HTTP/1.1[crlf]Host: ...">GET / HTTP/1.1[crlf]Host: cameroon-ssh-speed-166382236543.us-central1.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf][crlf]</textarea>
+  </div>
+
+  <!-- Tunnel Types -->
+  <div class="section">
+    <h2>Tunnel Types</h2>
+    <div class="checkbox-row">
+      <label><input type="checkbox" id="tProxy"> PROXY</label>
+      <label><input type="checkbox" id="tSsl"> SSL</label>
+      <label><input type="checkbox" id="tSslPay" checked> SSLPAY</label>
+      <label><input type="checkbox" id="tSsh"> SSH</label>
+      <label><input type="checkbox" id="tDns"> DNS</label>
+      <label><input type="checkbox" id="tUdp"> UDP</label>
+      <label><input type="checkbox" id="tV2ray"> V2RAY</label>
+    </div>
+  </div>
+
+  <!-- Version / Notes -->
+  <div class="section">
+    <h2>Version / Notes</h2>
+    <div class="row">
+      <div>
+        <label>Version</label>
+        <input type="text" id="version" value="1.0">
+      </div>
+    </div>
+    <label>Release Notes</label>
+    <input type="text" id="releaseNotes" placeholder="Mise à jour" value="">
+  </div>
+
+  <!-- Actions -->
+  <button onclick="generer()">🔐 GÉNÉRER LE CONFIG.JSON CHIFFRÉ</button>
+  <button class="secondary" onclick="genererEtTelecharger()">📁 GÉNÉRER ET TÉLÉCHARGER</button>
+
+  <div id="status" class="status"></div>
+
+  <h2>Aperçu JSON en clair</h2>
+  <div id="outputClair" class="output">—</div>
+
+  <h2>Résultat chiffré</h2>
+  <div id="outputChiffre" class="output">—</div>
+
+  <button class="secondary" onclick="copierChiffre()" style="margin-top:8px;">📋 COPIER LE RÉSULTAT CHIFFRÉ</button>
+
+</div>
+
+<!-- Bannière d'installation PWA -->
+<div id="installBanner" class="install-banner">
+  <span>📱 Installer Moust GEN sur votre écran d'accueil ?</span>
+  <button onclick="installerPWA()">Installer</button>
+</div>
+
+<script>
+// ============================================================
+//   ALGORITHME AESCRYPT.JAVA PORTÉ EN JAVASCRIPT
+// ============================================================
+
+const PAKYUKA_BYTES = [-37,-90,-31,-100,-111,-31,-100,-112,-31,-100,-113,-31,-100,-114,-31,-100,-116,-31,-100,-120,-31,-100,-121,-31,-100,-122,-31,-100,-126,-31,-100,-127,-31,-100,-128,-31,-100,-117,-31,-100,-118,-31,-100,-119,-31,-100,-123,-31,-100,-124,];
+
+let PAKYUKA = "";
+try {
+  const decoder = new TextDecoder('utf-8');
+  const bytes = new Uint8Array(PAKYUKA_BYTES.map(b => b & 0xFF));
+  PAKYUKA = decoder.decode(bytes);
+} catch(e) {
+  console.error("Erreur reconstruction PAKYUKA", e);
+}
+
+function JaHex(str) {
+  const bytes = new TextEncoder().encode(str);
+  let hex = "";
+  for (const b of bytes) {
+    hex += ("0" + (b & 0xFF).toString(16)).slice(-2).toUpperCase();
+  }
+  return hex;
+}
+
+function Jakey(str) { return JaHex(str); }
+
+function Jacodes(str) {
+  const bytes = new TextEncoder().encode(str);
+  const chars = Array.from(PAKYUKA);
+  let result = "";
+  for (const b of bytes) {
+    result += chars[(b & 0xF0) >> 4];
+    result += chars[b & 0x0F];
+  }
+  return result;
+}
+
+function genString(pakyukaStr) {
+  const chars = Array.from(pakyukaStr);
+  if (chars.length % 2 !== 0) throw new Error("Longueur PAKYUKA invalide");
+  const length = chars.length / 2;
+  const bytes = new Uint8Array(length);
+  const PAKY_ARR = Array.from(PAKYUKA);
+  for (let i = 0; i < length; i++) {
+    const hi = PAKY_ARR.indexOf(chars[i*2]);
+    const lo = PAKY_ARR.indexOf(chars[i*2+1]);
+    if (hi === -1 || lo === -1) throw new Error("Caractère PAKYUKA invalide");
+    bytes[i] = ((hi * 16) + lo) & 0xFF;
+  }
+  return new TextDecoder('utf-8').decode(bytes);
+}
+
+async function sha256(str) {
+  const data = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return new Uint8Array(hash);
+}
+
+async function encrypter(password, message) {
+  const ja = Jakey(password);
+  const keyBytes = await sha256(ja);
+  const iv = new Uint8Array(16);
+
+  const key = await crypto.subtle.importKey(
+    'raw', keyBytes, { name: 'AES-CBC' }, false, ['encrypt']
+  );
+  const encrypted = await crypto.subtle.encrypt(
+    { name: 'AES-CBC', iv },
+    key,
+    new TextEncoder().encode(message)
+  );
+
+  const base64 = btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+  return Jacodes(base64);
+}
+
+async function decrypter(password, pakyukaStr) {
+  const base64Str = genString(pakyukaStr);
+  const encrypted = Uint8Array.from(atob(base64Str), c => c.charCodeAt(0));
+
+  const ja = Jakey(password);
+  const keyBytes = await sha256(ja);
+  const iv = new Uint8Array(16);
+
+  const key = await crypto.subtle.importKey(
+    'raw', keyBytes, { name: 'AES-CBC' }, false, ['decrypt']
+  );
+  const decrypted = await crypto.subtle.decrypt(
+    { name: 'AES-CBC', iv },
+    key,
+    encrypted
+  );
+  return new TextDecoder('utf-8').decode(decrypted);
+}
+
+// ============================================================
+//   FONCTIONS DE L'INTERFACE
+// ============================================================
+
+function construireJson() {
+  const obj = {
+    "Name": document.getElementById('name').value || "Serveur",
+    "Flag": document.getElementById('flag').value || "us",
+    "ServerIP": document.getElementById('serverIp').value,
+    "ServerPort": document.getElementById('serverPort').value || "22",
+    "SSLPort": document.getElementById('sslPort').value || "443",
+    "ServerUser": document.getElementById('serverUser').value,
+    "ServerPass": document.getElementById('serverPass').value,
+    "Payload": document.getElementById('payload').value,
+    "SNI": document.getElementById('sni').value,
+    "MyServer": document.getElementById('myServer').value || "Server",
+    "ProxyIP": "",
+    "ProxyPort": "",
+    "SlowChave": "",
+    "NameServer": "",
+    "SlowDns": "",
+    "udpserver": "",
+    "udpauth": "",
+    "udpobfs": "",
+    "udpbuffer": "",
+    "udpdown": "",
+    "udpup": "",
+    "v2rayJson": "",
+    "ZacDevzS": document.getElementById('tSsl').checked,
+    "ZacDevzP": document.getElementById('tSslPay').checked,
+    "ZacDevzH": document.getElementById('tProxy').checked,
+    "ZacDevzD": document.getElementById('tSsh').checked,
+    "ZacDevzL": document.getElementById('tDns').checked,
+    "ZacDevzU": document.getElementById('tUdp').checked,
+    "ZacDevzV": document.getElementById('tV2ray').checked
+  };
+
+  const final = {
+    "Version": document.getElementById('version').value || "1.0",
+    "ReleaseNotes": document.getElementById('releaseNotes').value || "",
+    "Servers": [obj]
+  };
+
+  return JSON.stringify(final, null, 2);
+}
+
+async function generer() {
+  try {
+    const jsonClair = construireJson();
+    document.getElementById('outputClair').textContent = jsonClair;
+
+    const chiffre = await encrypter("mohamed", jsonClair);
+    document.getElementById('outputChiffre').textContent = chiffre;
+
+    afficherStatus("✅ Généré avec succès !", true);
+  } catch(e) {
+    afficherStatus("❌ Erreur : " + e.message, false);
+    console.error(e);
+  }
+}
+
+async function genererEtTelecharger() {
+  try {
+    const jsonClair = construireJson();
+    const chiffre = await encrypter("mohamed", jsonClair);
+
+    document.getElementById('outputClair').textContent = jsonClair;
+    document.getElementById('outputChiffre').textContent = chiffre;
+
+    const blob = new Blob([chiffre], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (document.getElementById('name').value || 'config') + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    afficherStatus("✅ Fichier téléchargé : " + a.download, true);
+  } catch(e) {
+    afficherStatus("❌ Erreur : " + e.message, false);
+    console.error(e);
+  }
+}
+
+function copierChiffre() {
+  const txt = document.getElementById('outputChiffre').textContent;
+  if (!txt || txt === "—") {
+    afficherStatus("⚠️ Génère d'abord un Config.json", false);
+    return;
+  }
+  navigator.clipboard.writeText(txt).then(() => {
+    afficherStatus("✅ Copié dans le presse-papier !", true);
+  }).catch(err => {
+    afficherStatus("❌ Impossible de copier", false);
+  });
+}
+
+function afficherStatus(msg, ok) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = "status " + (ok ? "ok" : "err");
+  setTimeout(() => { el.style.display = "none"; }, 5000);
+}
+
+// ============================================================
+//   PWA - Service Worker + Installation
+// ============================================================
+
+// Enregistrement du Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      console.log('SW enregistré :', reg.scope);
+    }).catch((err) => {
+      console.error('SW erreur :', err);
+    });
+  });
+}
+
+// Gestion du bouton d'installation
+let deferredPrompt = null;
+const installBanner = document.getElementById('installBanner');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBanner.classList.add('show');
+});
+
+function installerPWA() {
+  if (!deferredPrompt) {
+    afficherStatus("Pour installer : menu Chrome ⋮ → 'Installer l'application'", true);
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      afficherStatus("✅ Application installée !", true);
+    }
+    deferredPrompt = null;
+    installBanner.classList.remove('show');
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  installBanner.classList.remove('show');
+  console.log('PWA installée');
+});
+
+// Test au chargement
+async function testDecrypt() {
+  try {
+    const test = "test";
+    const chiffre = await encrypter("mohamed", test);
+    const dechiffre = await decrypter("mohamed", chiffre);
+    console.log("Test chiffrement/déchiffrement:", dechiffre === test ? "✅ OK" : "❌ KO");
+  } catch(e) {
+    console.error("Test échoué:", e);
+  }
+}
+testDecrypt();
+</script>
+</body>
+</html>
